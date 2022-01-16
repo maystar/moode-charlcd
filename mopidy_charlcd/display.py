@@ -3,8 +3,8 @@ import busio
 import logging
 import threading
 import time
-from CircuitPython_LCD.lcd.i2c_pcf8574_interface import I2CPCF8574Interface
-from CircuitPython_LCD.lcd.lcd import LCD
+from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
+from lcd.lcd import LCD
 
 from .charlcd_config import CharlcdConfig
 from .playback_state import PlaybackState

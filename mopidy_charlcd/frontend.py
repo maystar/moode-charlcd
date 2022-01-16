@@ -1,6 +1,7 @@
 import logging
+from typing import Optional
+
 import pykka
-from enum import Enum
 from mopidy import core
 
 from .charlcd_config import CharlcdConfig

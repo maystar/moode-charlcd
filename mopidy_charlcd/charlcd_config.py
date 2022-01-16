@@ -1,4 +1,4 @@
-from CircuitPython_LCD.lcd.i2c_pcf8574_interface import PinMapping
+from lcd.i2c_pcf8574_interface import PinMapping
 
 
 class CharlcdConfig:
