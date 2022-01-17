@@ -1,15 +1,23 @@
-import board
-import busio
 import logging
 import threading
 import time
+
+import board
+import busio
 from lcd.i2c_pcf8574_interface import I2CPCF8574Interface
 from lcd.lcd import LCD
 
 from .charlcd_config import CharlcdConfig
 from .playback_state import PlaybackState
+from .symbols import Symbols
 
 logger = logging.getLogger(__name__)
+
+PLAY = 0
+PAUSE = 1
+FORWARD = 2
+BACKWARD = 3
+QUIT = 4
 
 
 class TrackTime:
@@ -32,6 +40,7 @@ class Display:
         self.display = LCD(
             interface, num_cols=config.num_cols, num_rows=config.num_rows
         )
+        self.prog_playback_symbols()
         self.display.clear()
 
         self._running = threading.Event()
@@ -118,10 +127,15 @@ class Display:
     def print_button_info(self, row: int):
         self.display.set_cursor_pos(row, 0)
         if self.state == PlaybackState.PLAY:
-            self.display.print("|#|")
+            self.display.write(PAUSE)
         else:
-            self.display.print("|>|")
-        self.display.print("<<|>>|Q|")
+            self.display.write(PLAY)
+        self.display.print("|")
+        self.display.write(BACKWARD)
+        self.display.print("|")
+        self.display.write(FORWARD)
+        self.display.print("|")
+        self.display.write(QUIT)
 
     def print_progress(self, row: int):
         elapsed = TrackTime(self.elapsed)
@@ -152,3 +166,10 @@ class Display:
         aligned_text = "{0:<{1}}".format(truncated_text, max_length)
         self.display.set_cursor_pos(row, margin_left)
         self.display.print(aligned_text)
+
+    def prog_playback_symbols(self):
+        self.display.create_char(PLAY, Symbols.play)
+        self.display.create_char(PAUSE, Symbols.pause)
+        self.display.create_char(FORWARD, Symbols.forward)
+        self.display.create_char(BACKWARD, Symbols.backward)
+        self.display.create_char(QUIT, Symbols.quit)
