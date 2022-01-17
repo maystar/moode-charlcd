@@ -96,10 +96,8 @@ class Display:
 
     def update_track(self, title: str, album: str = None, artist: str = None):
         self.title = title
-        if artist:
-            self.artist = artist
-        if album:
-            self.album = album
+        self.artist = artist
+        self.album = album
 
     def update_elapsed(self, elapsed: float, length: float = None):
         self.elapsed = elapsed
@@ -144,12 +142,9 @@ class Display:
         self.print_row(row, progress, margin_left=self.config.num_cols - len(progress))
 
     def print_track_info(self, row_title: int, row_artist: int, row_album):
-        if self.title:
-            self.print_row(row_title, self.title)
-        if self.artist:
-            self.print_row(row_artist, self.artist)
-        if self.album:
-            self.print_row(row_album, self.album, margin_right=6)
+        self.print_row(row_title, self.title)
+        self.print_row(row_artist, self.artist)
+        self.print_row(row_album, self.album, margin_right=6)
 
     def print_day_time(self, row):
         localtime = time.localtime()
