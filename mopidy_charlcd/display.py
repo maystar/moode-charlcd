@@ -18,6 +18,10 @@ PAUSE = 1
 FORWARD = 2
 BACKWARD = 3
 QUIT = 4
+SHUFFLE = 5
+REPEAT = 0xF3
+CONSUME = 0xAB
+SPACE = 0x20
 
 
 class TrackTime:
@@ -28,6 +32,13 @@ class TrackTime:
 
     def __str__(self):
         return "{0:02.0f}:{1:02.0f}".format(self.minutes, self.seconds)
+
+
+class PlaybackOptions:
+    def __init__(self, repeat: bool = False, random: bool = False, consume: bool = False):
+        self.repeat = repeat
+        self.random = random
+        self.consume = consume
 
 
 class Display:
@@ -47,8 +58,6 @@ class Display:
         self._delay = 1.0 / 30
         self._thread = None
 
-        self.shuffle = False
-        self.repeat = False
         self.state = PlaybackState.STOP
         self.volume = 100
         self.progress = 0
@@ -64,6 +73,7 @@ class Display:
         self._last_art = ""
         self._last_elapsed_update = time.time()
         self._last_elapsed_value = 0
+        self.options = PlaybackOptions()
 
     def start(self):
         if self._thread is not None:
@@ -101,9 +111,8 @@ class Display:
     def update_volume(self, volume: int):
         self.volume = volume
 
-    def update_options(self, shuffle: bool, repeat: bool):
-        self.shuffle = shuffle
-        self.repeat = repeat
+    def update_options(self, random: bool, repeat: bool, consume: bool):
+        self.options = PlaybackOptions(repeat=repeat, random=random, consume=consume)
 
     def update_track(self, title: str, album: str = None, artist: str = None):
         self.title = title
@@ -148,10 +157,17 @@ class Display:
 
     def print_progress(self, row: int):
         elapsed = TrackTime(self.elapsed)
-        length = TrackTime(self.length)
-        progress = f"{elapsed}/{length}"
+        progress = f" {elapsed}"
         t = progress if self.elapsed else "{0:>{1}}".format(" ", len(progress))
         self.print_row(row, t, margin_left=self.config.num_cols - len(progress))
+
+        repeat_symbol = REPEAT if self.options.repeat else SPACE
+        random_symbol = SHUFFLE if self.options.random else SPACE
+        consume_symbol = CONSUME if self.options.consume else SPACE
+        self.display.set_cursor_pos(row, self.config.num_cols - len(progress) - 4)
+        self.display.write(repeat_symbol)
+        self.display.write(random_symbol)
+        self.display.write(consume_symbol)
 
     def print_track_info(self, row_title: int, row_artist: int, row_album):
         self.print_row(row_title, self.title)
@@ -180,3 +196,4 @@ class Display:
         self.display.create_char(FORWARD, Symbols.forward)
         self.display.create_char(BACKWARD, Symbols.backward)
         self.display.create_char(QUIT, Symbols.quit)
+        self.display.create_char(SHUFFLE, Symbols.shuffle)

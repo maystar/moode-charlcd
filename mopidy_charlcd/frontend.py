@@ -22,6 +22,7 @@ class CharlcdFrontend(pykka.ThreadingActor, core.CoreListener):
         self.display = Display(self.config)
         self.display.start()
         self.display.update_volume(self.core.mixer.get_volume().get())
+        self.options_changed()
 
     def on_stop(self):
         self.display.stop()
@@ -32,8 +33,9 @@ class CharlcdFrontend(pykka.ThreadingActor, core.CoreListener):
 
     def options_changed(self):
         self.display.update_options(
-            shuffle=self.core.tracklist.get_random(),
-            repeat=self.core.tracklist.get_repeat(),
+            random=self.core.tracklist.get_random().get(),
+            repeat=self.core.tracklist.get_repeat().get(),
+            consume=self.core.tracklist.get_consume().get()
         )
 
     def playlist_changed(self, playlist):
