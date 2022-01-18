@@ -6,7 +6,6 @@ from mopidy import core
 
 from .charlcd_config import CharlcdConfig
 from .display import Display
-from .playback_state import PlaybackState
 
 logger = logging.getLogger(__name__)
 
@@ -50,25 +49,30 @@ class CharlcdFrontend(pykka.ThreadingActor, core.CoreListener):
         self.update_elapsed(time_position)
 
     def stream_title_changed(self, title):
-        logger.info("stream_title_changed: %s %s", title, type(title))
         self.update_track(title)
 
     def track_playback_ended(self, tl_track, time_position):
         self.update_elapsed(time_position)
-        self.display.update_state(PlaybackState.STOP)
-        self.display.update_track("", "", "")
+        self.display.stop_playback()
 
     def track_playback_paused(self, tl_track, time_position):
         self.update_elapsed(time_position)
-        self.display.update_state(PlaybackState.PAUSE)
 
     def track_playback_resumed(self, tl_track, time_position):
         self.update_elapsed(time_position)
-        self.display.update_state(PlaybackState.PLAY)
 
     def track_playback_started(self, tl_track):
         self.update_track(tl_track.track, 0)
-        self.display.update_state(PlaybackState.PLAY)
+
+    def playback_state_changed(self, old_state, new_state):
+        if new_state == "stopped":
+            self.display.stop_playback()
+        elif new_state == "playing":
+            self.display.start_playback()
+        elif new_state == "paused":
+            self.display.pause_playback()
+        else:
+            logger.info(f"Change playback state to unhandled state {new_state}")
 
     def update_elapsed(self, time_position):
         self.display.update_elapsed(float(time_position))

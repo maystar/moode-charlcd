@@ -83,6 +83,17 @@ class Display:
         self.display.set_cursor_pos(1, 0)
         self.display.print("Und tschüss!")
 
+    def stop_playback(self):
+        self.update_state(PlaybackState.STOP)
+        self.update_track("", "", "")
+        self.update_elapsed(0)
+
+    def pause_playback(self):
+        self.update_state(PlaybackState.PAUSE)
+
+    def start_playback(self):
+        self.update_state(PlaybackState.PLAY)
+
     def update_state(self, state: PlaybackState):
         self._last_state_change = time.time()
         self.state = state
@@ -139,7 +150,8 @@ class Display:
         elapsed = TrackTime(self.elapsed)
         length = TrackTime(self.length)
         progress = f"{elapsed}/{length}"
-        self.print_row(row, progress, margin_left=self.config.num_cols - len(progress))
+        t = progress if self.elapsed else "{0:>{1}}".format(" ", len(progress))
+        self.print_row(row, t, margin_left=self.config.num_cols - len(progress))
 
     def print_track_info(self, row_title: int, row_artist: int, row_album):
         self.print_row(row_title, self.title)
