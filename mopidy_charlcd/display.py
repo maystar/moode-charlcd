@@ -19,8 +19,9 @@ FORWARD = 2
 BACKWARD = 3
 QUIT = 4
 SHUFFLE = 5
+CONSUME = 6
+PLAYING = 7
 REPEAT = 0xF3
-CONSUME = 0xAB
 SPACE = 0x20
 
 
@@ -157,17 +158,20 @@ class Display:
 
     def print_progress(self, row: int):
         elapsed = TrackTime(self.elapsed)
-        progress = f" {elapsed}"
+        progress = f"{elapsed}"
         t = progress if self.elapsed else "{0:>{1}}".format(" ", len(progress))
         self.print_row(row, t, margin_left=self.config.num_cols - len(progress))
 
         repeat_symbol = REPEAT if self.options.repeat else SPACE
         random_symbol = SHUFFLE if self.options.random else SPACE
         consume_symbol = CONSUME if self.options.consume else SPACE
-        self.display.set_cursor_pos(row, self.config.num_cols - len(progress) - 4)
+        playing_symbol = PLAYING if self.state == PlaybackState.PLAY else SPACE
+        self.display.set_cursor_pos(row, self.config.num_cols - len(progress) - 5)
         self.display.write(repeat_symbol)
         self.display.write(random_symbol)
         self.display.write(consume_symbol)
+        self.display.write(SPACE)
+        self.display.write(playing_symbol)
 
     def print_track_info(self, row_title: int, row_artist: int, row_album):
         self.print_row(row_title, self.title)
@@ -197,3 +201,5 @@ class Display:
         self.display.create_char(BACKWARD, Symbols.backward)
         self.display.create_char(QUIT, Symbols.quit)
         self.display.create_char(SHUFFLE, Symbols.shuffle)
+        self.display.create_char(CONSUME, Symbols.consume)
+        self.display.create_char(PLAYING, Symbols.playing)
