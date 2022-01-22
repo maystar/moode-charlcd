@@ -1,5 +1,4 @@
 from mopidy_charlcd import Extension
-from mopidy_charlcd import frontend as frontend_lib
 
 
 def test_get_default_config():
@@ -16,9 +15,7 @@ def test_get_config_schema():
 
     schema = ext.get_config_schema()
 
-    # TODO Test the content of your config schema
-    # assert "username" in schema
-    # assert "password" in schema
-
-
-# TODO Write more tests
+    assert "i2c_port" in schema
+    assert "pin_mapping_variant" in schema
+    assert "num_cols" in schema
+    assert "num_rows" in schema
