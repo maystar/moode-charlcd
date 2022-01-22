@@ -7,11 +7,11 @@ Mopidy-Charlcd
     :alt: Latest PyPI version
 
 .. image:: https://img.shields.io/github/workflow/status/maystar@web.de/mopidy-charlcd/CI
-    :target: https://github.com/maystar@web.de/mopidy-charlcd/actions
+    :target: https://github.com/maystar/mopidy-charlcd/actions
     :alt: CI build status
 
 .. image:: https://img.shields.io/codecov/c/gh/maystar@web.de/mopidy-charlcd
-    :target: https://codecov.io/gh/maystar@web.de/mopidy-charlcd
+    :target: https://codecov.io/gh/maystar/mopidy-charlcd
     :alt: Test coverage
 
 Mopidy extension for showing track information on a character liquide crystal display
