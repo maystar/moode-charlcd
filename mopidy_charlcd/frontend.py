@@ -35,7 +35,7 @@ class CharlcdFrontend(pykka.ThreadingActor, core.CoreListener):
         self.display.update_options(
             random=self.core.tracklist.get_random().get(),
             repeat=self.core.tracklist.get_repeat().get(),
-            consume=self.core.tracklist.get_consume().get()
+            consume=self.core.tracklist.get_consume().get(),
         )
 
     def playlist_changed(self, playlist):

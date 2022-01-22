@@ -7,9 +7,8 @@ __version__ = pkg_resources.get_distribution("Mopidy-Charlcd").version
 
 
 class HexInteger(config.Integer):
-
     def __init__(
-            self, minimum=None, maximum=None, choices=None, optional=False
+        self, minimum=None, maximum=None, choices=None, optional=False
     ):
         super().__init__(minimum, maximum, choices, optional)
 
@@ -36,4 +35,5 @@ class Extension(ext.Extension):
 
     def setup(self, registry):
         from .frontend import CharlcdFrontend
+
         registry.add("frontend", CharlcdFrontend)

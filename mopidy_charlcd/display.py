@@ -36,7 +36,9 @@ class TrackTime:
 
 
 class PlaybackOptions:
-    def __init__(self, repeat: bool = False, random: bool = False, consume: bool = False):
+    def __init__(
+        self, repeat: bool = False, random: bool = False, consume: bool = False
+    ):
         self.repeat = repeat
         self.random = random
         self.consume = consume
@@ -113,7 +115,9 @@ class Display:
         self.volume = volume
 
     def update_options(self, random: bool, repeat: bool, consume: bool):
-        self.options = PlaybackOptions(repeat=repeat, random=random, consume=consume)
+        self.options = PlaybackOptions(
+            repeat=repeat, random=random, consume=consume
+        )
 
     def update_track(self, title: str, album: str = None, artist: str = None):
         self.title = title
@@ -166,7 +170,9 @@ class Display:
         random_symbol = SHUFFLE if self.options.random else SPACE
         consume_symbol = CONSUME if self.options.consume else SPACE
         playing_symbol = PLAYING if self.state == PlaybackState.PLAY else SPACE
-        self.display.set_cursor_pos(row, self.config.num_cols - len(progress) - 5)
+        self.display.set_cursor_pos(
+            row, self.config.num_cols - len(progress) - 5
+        )
         self.display.write(repeat_symbol)
         self.display.write(random_symbol)
         self.display.write(consume_symbol)
@@ -186,7 +192,7 @@ class Display:
         )
 
     def print_row(
-            self, row: int, text: str, margin_left: int = 0, margin_right: int = 0
+        self, row: int, text: str, margin_left: int = 0, margin_right: int = 0
     ):
         max_length = self.config.num_cols - margin_left - margin_right
         truncated_text = text if len(text) <= max_length else text[:max_length]
