@@ -2,7 +2,7 @@ import logging
 from typing import Optional
 
 import pykka
-from mopidy import core
+from moode import core
 
 from .charlcd_config import CharlcdConfig
 from .display import Display

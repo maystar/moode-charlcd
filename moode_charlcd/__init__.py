@@ -1,9 +1,9 @@
 import pathlib
 
 import pkg_resources
-from mopidy import config, ext
+from moode import config, ext
 
-__version__ = pkg_resources.get_distribution("Mopidy-Charlcd").version
+__version__ = pkg_resources.get_distribution("Moode-Charlcd").version
 
 
 class HexInteger(config.Integer):
@@ -18,7 +18,7 @@ class HexInteger(config.Integer):
 
 
 class Extension(ext.Extension):
-    dist_name = "Mopidy-Charlcd"
+    dist_name = "Moode-Charlcd"
     ext_name = "charlcd"
     version = __version__
 

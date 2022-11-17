@@ -27,7 +27,7 @@ jobs:
 
     name: ${{ matrix.name }}
     runs-on: ubuntu-20.04
-    container: ghcr.io/mopidy/ci:latest
+    container: ghcr.io/moode/ci:latest
 
     steps:
       - uses: actions/checkout@v2

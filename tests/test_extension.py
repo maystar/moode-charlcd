@@ -1,4 +1,4 @@
-from mopidy_charlcd import Extension
+from moode_charlcd import Extension
 
 
 def test_get_default_config():
