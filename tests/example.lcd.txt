@@ -1,0 +1,14 @@
+file=NAS/rasp4/Audioslave/Audioslave/03 - Gasoline.flac
+artist=Audioslave
+album=Audioslave
+title=Gasoline
+coverurl=/coverart.php/NAS%2Frasp4%2FAudioslave%2FAudioslave%2F03%20-%20Gasoline.flac
+track=3
+date=2002
+composer=
+encoded=16/44.1 FLAC
+bitrate=1.102 Mbps
+outrate=0 bps
+volume=62
+mute=0
+state=pause
