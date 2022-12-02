@@ -33,6 +33,10 @@ class LcdTextReader:
         self.display.update_volume(self.core.mixer.get_volume().get())
 
 
-if __name__ == '__main__':
+def main():
     reader = LcdTextReader('config.prop')
     reader.read_file()
+
+
+if __name__ == '__main__':
+    main()
