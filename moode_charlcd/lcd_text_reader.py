@@ -2,9 +2,9 @@ import logging
 
 from jproperties import Properties
 
-from moode_charlcd.charlcd_config import CharlcdConfig
-from moode_charlcd.current_song import CurrentSong
-from moode_charlcd.display import Display
+from .charlcd_config import CharlcdConfig
+from .current_song import CurrentSong
+from .display import Display
 
 logger = logging.getLogger(__name__)
 
