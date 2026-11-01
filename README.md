@@ -80,11 +80,13 @@ sudo python3 -m venv --system-site-packages /opt/moode-charlcd/venv
 sudo /opt/moode-charlcd/venv/bin/pip install --no-deps "git+https://github.com/maystar/moode-charlcd@v0.1.0"
 ```
 
-Add the shutdown button to `/boot/firmware/config.txt` (moOde already sets
-`dtparam=i2c_arm=on`) and reboot:
+The shutdown button is not part of this service. Script `24-config-shutdown-button.sh` adds it
+to `/boot/firmware/config.txt` (moOde already sets `dtparam=i2c_arm=on`); manually add the
+following lines and reboot:
 
 ```
-dtoverlay=gpio-shutdown,gpio_pin=9,active_low=0
+# Shutdown with gpio 9
+dtoverlay=gpio-shutdown,gpio_pin=9,active_low=1,gpio_pull=up
 ```
 
 Keep moOde's own *GPIO buttons* and *LCD updater* (Configure › Peripherals) switched off,

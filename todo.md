@@ -73,9 +73,11 @@ MoodeRendererAdapter ──────┼─> NowPlaying ─> NowPlayingService
 - [x] 118 Unit-Tests ohne Hardware, Coverage ~96 %, ruff + mypy strict ohne Befunde
 - [x] Probelauf lokal mit `--display console` (MPD offline, Abschiedstext)
 - [x] README.md und CHANGELOG.md (Englisch), CI mit getrennten Jobs für Lint/Typprüfung und Tests (Python 3.11 und 3.13, Coverage-Zusammenfassung, Testergebnisse als Artefakt)
-- [x] Provisionierung: `scripts/23-install-moode-charlcd.sh` (apt-Pakete, I2C, `gpio-shutdown`-Overlay
-      idempotent in moOdes `config.txt`, venv, Konfiguration, systemd-Dienst mit DynamicUser);
-      `config.txt`-Bearbeitung gegen moOdes Vorlage getestet, ShellCheck sauber
+- [x] Provisionierung: `scripts/23-install-moode-charlcd.sh` (apt-Pakete, I2C, venv, Konfiguration,
+      systemd-Dienst mit DynamicUser) und `scripts/24-config-shutdown-button.sh`
+      (`dtoverlay=gpio-shutdown,gpio_pin=9,active_low=1,gpio_pull=up`, idempotent, ersetzt eine
+      vorhandene `gpio-shutdown`-Zeile); `config.txt`-Bearbeitung gegen moOdes Vorlage getestet,
+      ShellCheck sauber
 
 ## 4. Nächste Schritte
 
@@ -99,7 +101,7 @@ MoodeRendererAdapter ──────┼─> NowPlaying ─> NowPlayingService
 - [ ] Bluetooth: `btactive` gesetzt, `busctl` liefert JSON im erwarteten Format
       (`busctl --json=short call org.bluez / org.freedesktop.DBus.ObjectManager GetManagedObjects`),
       Gruppe `bluetooth` darf mit BlueZ sprechen, `Position` läuft mit
-- [ ] Shutdown-Taster BCM9 → „Und tschüss!“ und Pi fährt herunter
+- [ ] Shutdown-Taster BCM9 (Skript 24) → „Und tschüss!“ und Pi fährt herunter
 - [ ] MPD-Neustart über die moOde-UI → Dienst verbindet sich neu
 - [ ] Radio: Sender + Stream-Titel
 - [ ] Bei Abweichungen Testdaten (z. B. echte `busctl`-Ausgabe, `*meta.json`) in `tests/` übernehmen
