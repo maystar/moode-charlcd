@@ -66,7 +66,7 @@ MoodeRendererAdapter ──────┼─> NowPlaying ─> NowPlayingService
 - [x] Display-HAL, HD44780-Treiber, PCF8574-Bus (joyit/standard), Konsolen-Display
 - [x] Layout, Screen mit Diff und Slot-Verwaltung
 - [x] MPD-Adapter (idle, Reconnect, Radio mit „Interpret - Titel“-Aufteilung, Optionen)
-- [x] moOde-Renderer-Adapter (Spotify, AirPlay, Qobuz, Deezer, Squeezelite, Roon, Plexamp, Eingang)
+- [x] moOde-Renderer-Adapter (Spotify, AirPlay, Qobuz, Squeezelite, Roon, Plexamp, Eingang, Multiroom)
 - [x] Bluetooth über BlueZ inkl. Steuerung
 - [x] Taster über gpiozero (Auslösung beim Drücken; Fehler beim Einrichten → Betrieb ohne Taster)
 - [x] Abschiedstext bei SIGTERM

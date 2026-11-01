@@ -4,6 +4,8 @@ moOde stores which renderer is active in its SQLite database (table
 ``cfg_system``, e.g. ``spotactive=1``) and writes renderer metadata to JSON
 files in ``/var/local/www`` (``spotmeta.json``, ``aplmeta.json``, ...). While a
 renderer is active, MPD is stopped and this adapter takes precedence.
+
+Flag names and file formats checked against moOde 10.3.6 (Raspberry Pi OS Trixie).
 """
 
 from __future__ import annotations
@@ -39,11 +41,11 @@ RENDERERS = (
     Renderer("spotactive", "spotify", "Spotify", "spotmeta.json"),
     Renderer("aplactive", "airplay", "AirPlay", "aplmeta.json"),
     Renderer("qbzactive", "qobuz", "Qobuz", "qbzmeta.json"),
-    Renderer("deezactive", "deezer", "Deezer", "deezmeta.json"),
     Renderer("slactive", "squeezelite", "Squeezelite"),
     Renderer("rbactive", "roon", "Roon"),
     Renderer("paactive", "plexamp", "Plexamp"),
     Renderer("inpactive", "input", "Eingang"),
+    Renderer("rxactive", "multiroom", "Multiroom"),
 )
 
 

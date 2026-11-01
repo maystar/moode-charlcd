@@ -38,8 +38,8 @@ Audioslave     12:34    album │ clock
 |---|---|---|
 | MPD (library, radio, UPnP/DLNA) | title, artist, album, elapsed time, repeat/random/consume | play/pause, previous, next |
 | Bluetooth (phone etc.) | title, artist, album, elapsed time | play/pause, previous, next |
-| Spotify Connect, AirPlay, Qobuz, Deezer | title, artist, album | – |
-| Squeezelite, Roon, Plexamp, inputs | renderer name | – |
+| Spotify Connect, AirPlay, Qobuz | title, artist, album | – |
+| Squeezelite, Roon, Plexamp, inputs, multiroom receiver | renderer name | – |
 
 - **MPD** is followed through its `idle` events, so changes in the moOde web UI show up
   immediately. For radio streams the station is shown as album and a stream title of the form
@@ -207,7 +207,8 @@ returning `NowPlaying` while active and `None` otherwise, and add it in `build_a
 
 ## Development
 
-Requires Python ≥ 3.11 (Raspberry Pi OS Bookworm).
+Requires Python ≥ 3.11. Target is moOde 10 (Raspberry Pi OS Trixie, Python 3.13); moOde 9
+(Bookworm, Python 3.11) should work as well.
 
 ```sh
 python3 -m venv .venv && . .venv/bin/activate

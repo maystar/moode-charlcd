@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 3.11 = Raspberry Pi OS Bookworm (moOde 9), 3.13 = Trixie
+        # 3.11 = Raspberry Pi OS Bookworm (moOde 9), 3.13 = Trixie (moOde 10)
         python: ["3.11", "3.13"]
     steps:
       - uses: actions/checkout@v4

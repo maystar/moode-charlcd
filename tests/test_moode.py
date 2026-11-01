@@ -186,3 +186,15 @@ def test_database_error_is_logged_once(caplog: pytest.LogCaptureFixture) -> None
     state.error = None
     assert a.poll(None) is not None
     assert "readable again" in caplog.text
+
+
+def test_multiroom_receiver() -> None:
+    np = adapter(FakeState("rxactive")).poll(None)
+    assert np is not None
+    assert (np.source, np.source_label) == ("multiroom", "Multiroom")
+
+
+def test_moode10_flags_are_known(tmp_path: Path) -> None:
+    # Flags written by moOde 10.3.6 (worker.php, spotevent.sh, phpSession)
+    db = make_db(tmp_path / "moode.db", btactive="1", rxactive="1", scnactive="1")
+    assert MoodeDatabase(db).active_flags() == {"btactive", "rxactive"}  # screensaver ignored
