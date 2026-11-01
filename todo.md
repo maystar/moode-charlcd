@@ -72,7 +72,7 @@ MoodeRendererAdapter ──────┼─> NowPlaying ─> NowPlayingService
 - [x] Abschiedstext bei SIGTERM
 - [x] 118 Unit-Tests ohne Hardware, Coverage ~96 %, ruff + mypy strict ohne Befunde
 - [x] Probelauf lokal mit `--display console` (MPD offline, Abschiedstext)
-- [x] README (Englisch), CI-Workflow (Python 3.11 und 3.13)
+- [x] README.md und CHANGELOG.md (Englisch), CI mit getrennten Jobs für Lint/Typprüfung und Tests (Python 3.11 und 3.13, Coverage-Zusammenfassung, Testergebnisse als Artefakt)
 - [x] Provisionierung: `scripts/23-install-moode-charlcd.sh` (apt-Pakete, I2C, `gpio-shutdown`-Overlay
       idempotent in moOdes `config.txt`, venv, Konfiguration, systemd-Dienst mit DynamicUser);
       `config.txt`-Bearbeitung gegen moOdes Vorlage getestet, ShellCheck sauber

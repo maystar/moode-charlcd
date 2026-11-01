@@ -9,3 +9,5 @@ __pycache__/
 /build/
 /dist/
 /.idea/
+/coverage.xml
+/test-results.xml
