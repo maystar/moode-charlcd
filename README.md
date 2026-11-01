@@ -12,8 +12,9 @@ character displays only need a small driver. Successor of
 
 ![Raspberry Pi 4 with LCD in Lego case](doc/raspi-with-charlcd.jpg)
 
-> **Status:** Version 0.2.1 is unit tested without hardware; testing on the device is in progress.
-> See [todo.md](todo.md) for the open checks.
+> **Status:** Version 0.2.1 runs on a Raspberry Pi 4 with moOde 10 and the Joy-IT RB-LCD-20x4.
+> Display, umlauts, buttons, shutdown button, MPD (library and radio, reconnect after an MPD
+> restart) and Spotify Connect are tested on the device; Bluetooth is not tested yet.
 
 ## Screen layout
 

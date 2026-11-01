@@ -4,8 +4,8 @@ Ziel: Das 20x4-Zeichendisplay (Joy-IT RB-LCD-20x4, HD44780 über PCF8574 an I2C 
 Taster am Raspberry Pi unter moOde mindestens so nutzen wie früher mit `mopidy-charlcd` +
 `mopidy-raspberry-gpio`, zusätzlich Infos anderer moOde-Renderer anzeigen.
 
-**Stand 2026-11-01:** v0.2.1 ist auf dem Pi installiert, die Prüfung am Gerät läuft
-(siehe „Am Pi prüfen“).
+**Stand 2026-11-01:** v0.2.1 läuft auf dem Pi und ist am Gerät geprüft; offen ist nur noch
+Bluetooth (siehe „Am Pi prüfen“).
 
 | Repo | Branch | Commit |
 |---|---|---|
@@ -95,20 +95,20 @@ MoodeRendererAdapter ──────┼─> NowPlaying ─> NowPlayingService
 - [x] MPD-Anbindung: Mit python-mpd2 3.x (Trixie) fehlten `send_idle`/`fetch_idle`, Anzeige
       dauerhaft „MPD offline“ → behoben in v0.2.1 (blockierendes `idle()`, Test gegen echtes
       python-mpd2)
-- [ ] `sudo bash scripts/23-install-moode-charlcd.sh`, Neustart, `journalctl -u moode-charlcd -f`
-- [ ] `i2cdetect -y 1` zeigt 0x27; Display initialisiert mit Pinbelegung `joyit`
-- [ ] Umlaute korrekt (ROM A00 vermutet; sonst `charset = "A02"`)
-- [ ] Taster BCM4/16/10 lösen beim Drücken aus (Pull-up, nach GND); kein doppeltes Auslösen
+- [x] `sudo bash scripts/23-install-moode-charlcd.sh`, Neustart, `journalctl -u moode-charlcd -f`
+- [x] `i2cdetect -y 1` zeigt 0x27; Display initialisiert mit Pinbelegung `joyit`
+- [x] Umlaute korrekt (ROM A00 vermutet; sonst `charset = "A02"`)
+- [x] Taster BCM4/16/10 lösen beim Drücken aus (Pull-up, nach GND); kein doppeltes Auslösen
       → moOde „GPIO buttons“ müssen aus sein
-- [ ] lgpio funktioniert mit DynamicUser (`LG_WD=/run/moode-charlcd`)
-- [ ] moOde-Datenbank für den Dienstbenutzer lesbar (Skript warnt sonst)
-- [ ] Spotify: `spotactive` und `spotmeta.json` werden erkannt
+- [x] lgpio funktioniert mit DynamicUser (`LG_WD=/run/moode-charlcd`)
+- [x] moOde-Datenbank für den Dienstbenutzer lesbar (Skript warnt sonst)
+- [x] Spotify: `spotactive` und `spotmeta.json` werden erkannt
 - [ ] Bluetooth: `btactive` gesetzt, `busctl` liefert JSON im erwarteten Format
       (`busctl --json=short call org.bluez / org.freedesktop.DBus.ObjectManager GetManagedObjects`),
       Gruppe `bluetooth` darf mit BlueZ sprechen, `Position` läuft mit
-- [ ] Shutdown-Taster BCM9 (Skript 24) → „Und tschüss!“ und Pi fährt herunter
-- [ ] MPD-Neustart über die moOde-UI → Dienst verbindet sich neu
-- [ ] Radio: Sender + Stream-Titel
+- [x] Shutdown-Taster BCM9 (Skript 24) → „Und tschüss!“ und Pi fährt herunter
+- [x] MPD-Neustart über die moOde-UI → Dienst verbindet sich neu
+- [x] Radio: Sender + Stream-Titel
 - [ ] Bei Abweichungen Testdaten (z. B. echte `busctl`-Ausgabe, `*meta.json`) in `tests/` übernehmen
 
 ### Phase 8 – Abschluss
