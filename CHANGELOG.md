@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.2.0 (2026-11-01)
 
 First version for moOde (target: moOde 10 on Raspberry Pi OS Trixie), replacing the Mopidy extension
-[mopidy-charlcd](https://github.com/maystar/mopidy-charlcd).
+[mopidy-charlcd](https://github.com/maystar/mopidy-charlcd). Version 0.2.0 because the
+repository already carries a tag `0.1.1` from the earlier, unfinished code.
 
 - Standalone service `moode-charlcd` with TOML configuration.
 - MPD via `idle` events: title, artist, album, elapsed time, repeat/random/consume, radio streams.

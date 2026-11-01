@@ -12,7 +12,7 @@ character displays only need a small driver. Successor of
 
 ![Raspberry Pi 4 with LCD in Lego case](doc/raspi-with-charlcd.jpg)
 
-> **Status:** Version 0.1.0 is written and unit tested without hardware; it has not been tested on
+> **Status:** Version 0.2.0 is written and unit tested without hardware; it has not been tested on
 > the device yet. See [todo.md](todo.md) for the open checks.
 
 ## Screen layout
@@ -77,7 +77,7 @@ On the Pi the service is installed by the provisioning script `23-install-moode-
 ```sh
 sudo apt install git python3-venv python3-mpd python3-smbus2 python3-gpiozero python3-lgpio i2c-tools
 sudo python3 -m venv --system-site-packages /opt/moode-charlcd/venv
-sudo /opt/moode-charlcd/venv/bin/pip install --no-deps "git+https://github.com/maystar/moode-charlcd@v0.1.0"
+sudo /opt/moode-charlcd/venv/bin/pip install --no-deps "git+https://github.com/maystar/moode-charlcd@v0.2.0"
 ```
 
 The shutdown button is not part of this service. Script `24-config-shutdown-button.sh` adds it
