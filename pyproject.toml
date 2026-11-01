@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moode-charlcd"
+version = "0.1.0"
+description = "Shows moOde audio player information on a character LCD and handles hardware buttons"
+readme = "README.rst"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Fabian" }]
+requires-python = ">=3.11"
+dependencies = [
+    "python-mpd2>=3.0",
+]
+
+[project.optional-dependencies]
+# Hardware access. On Raspberry Pi OS these come from apt (python3-smbus2,
+# python3-gpiozero, python3-lgpio) and are used via --system-site-packages.
+hardware = ["smbus2>=0.4", "gpiozero>=2.0"]
+test = ["pytest>=7", "pytest-cov>=4"]
+lint = ["ruff>=0.6", "mypy>=1.10"]
+dev = ["moode-charlcd[test,lint]"]
+
+[project.scripts]
+moode-charlcd = "moode_charlcd.__main__:main"
+
+[project.urls]
+Source = "https://github.com/maystar/moode-charlcd"
+
+[tool.setuptools.packages.find]
+include = ["moode_charlcd*"]
+
+[tool.setuptools.package-data]
+moode_charlcd = ["default_config.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+
+[tool.coverage.run]
+source = ["moode_charlcd"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E", "W",  # pycodestyle
+    "F",       # pyflakes
+    "I",       # isort
+    "N",       # pep8-naming
+    "UP",      # pyupgrade
+    "B",       # flake8-bugbear
+    "C4",      # flake8-comprehensions
+    "SIM",     # flake8-simplify
+    "PT",      # flake8-pytest-style
+    "RUF",     # ruff specific
+]
+ignore = [
+    "RUF001",  # ambiguous unicode characters are intended (display glyphs)
+    "RUF002",
+    "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unreachable = true
+files = ["moode_charlcd", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["mpd", "smbus2", "gpiozero"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+disallow_incomplete_defs = false

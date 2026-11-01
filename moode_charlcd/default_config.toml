@@ -1,0 +1,51 @@
+# Default configuration of moode-charlcd.
+# Values in /etc/moode-charlcd.toml override these defaults key by key.
+
+[display]
+# "hd44780-pcf8574": HD44780 character LCD behind a PCF8574 I2C backpack
+# "console":         prints the screen to stdout (development without hardware)
+driver = "hd44780-pcf8574"
+cols = 20
+rows = 4
+# Screen updates per second (the clock and elapsed time are interpolated)
+refresh_hz = 4
+# Shown when the service stops (e.g. on shutdown)
+goodbye = "Und tschüss!"
+# Additionally print every screen change to stdout (visible in the journal)
+console_mirror = false
+
+[display.hd44780-pcf8574]
+i2c_bus = 1
+i2c_address = 0x27
+# "standard": P0=RS P1=RW P2=EN P3=Backlight P4..P7=D4..D7 (most backpacks)
+# "joyit":    P0..P3=D4..D7 P4=RS P7=EN, no backlight bit (Joy-IT RB-LCD-20x4)
+pin_mapping = "joyit"
+# Character ROM of the controller: "A00" (Japanese, most common) or "A02" (European)
+charset = "A00"
+
+[mpd]
+host = "localhost"
+port = 6600
+# Seconds between reconnect attempts
+reconnect_interval = 3
+
+[moode]
+# Detects active moOde renderers (Spotify, Bluetooth, AirPlay, ...)
+enabled = true
+database = "/var/local/www/db/moode-sqlite3.db"
+metadata_dir = "/var/local/www"
+poll_interval = 1.0
+
+[bluetooth]
+# Metadata and play/pause/next/previous for Bluetooth sources via BlueZ (AVRCP)
+enabled = true
+
+[buttons]
+enabled = true
+bounce_ms = 250
+# Pins use BCM numbering, buttons connect the pin to GND (internal pull-up).
+# Remove an entry to disable that button.
+[buttons.pins]
+play_pause = 4
+previous = 16
+next = 10

@@ -1,5 +1,3 @@
-import logging
-import os
+"""Show moOde audio player information on a character LCD."""
 
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"),
-                    format='%(asctime)s: %(levelname)s [%(name)s] %(message)s')
+__version__ = "0.1.0"
