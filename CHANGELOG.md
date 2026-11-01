@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 (2026-11-01)
+
+- Fix MPD always shown as offline with python-mpd2 3.x (Raspberry Pi OS Trixie): the adapter
+  used `send_idle`/`fetch_idle`, which no longer exist. It now uses the blocking `idle()` and
+  shuts the socket down to stop.
+- Test the MPD adapter against the real python-mpd2 client and a fake MPD server.
+
 ## 0.2.0 (2026-11-01)
 
 First version for moOde (target: moOde 10 on Raspberry Pi OS Trixie), replacing the Mopidy extension

@@ -4,8 +4,8 @@ Ziel: Das 20x4-Zeichendisplay (Joy-IT RB-LCD-20x4, HD44780 über PCF8574 an I2C 
 Taster am Raspberry Pi unter moOde mindestens so nutzen wie früher mit `mopidy-charlcd` +
 `mopidy-raspberry-gpio`, zusätzlich Infos anderer moOde-Renderer anzeigen.
 
-**Stand 2026-11-01:** Code, Tests und Provisionierungsskript sind geschrieben, aber **noch nicht
-auf dem Pi getestet**.
+**Stand 2026-11-01:** v0.2.1 ist auf dem Pi installiert, die Prüfung am Gerät läuft
+(siehe „Am Pi prüfen“).
 
 | Repo | Branch | Commit |
 |---|---|---|
@@ -92,6 +92,9 @@ MoodeRendererAdapter ──────┼─> NowPlaying ─> NowPlayingService
 
 ### Am Pi prüfen (blind getroffene Annahmen)
 
+- [x] MPD-Anbindung: Mit python-mpd2 3.x (Trixie) fehlten `send_idle`/`fetch_idle`, Anzeige
+      dauerhaft „MPD offline“ → behoben in v0.2.1 (blockierendes `idle()`, Test gegen echtes
+      python-mpd2)
 - [ ] `sudo bash scripts/23-install-moode-charlcd.sh`, Neustart, `journalctl -u moode-charlcd -f`
 - [ ] `i2cdetect -y 1` zeigt 0x27; Display initialisiert mit Pinbelegung `joyit`
 - [ ] Umlaute korrekt (ROM A00 vermutet; sonst `charset = "A02"`)

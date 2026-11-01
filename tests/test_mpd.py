@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import socket
 import threading
+import time
 from typing import Any
 
 import pytest
@@ -101,11 +102,10 @@ class FakeClient:
     def currentsong(self) -> dict[str, Any]:
         return self.song
 
-    def send_idle(self, *subsystems: str) -> None:
-        self.calls.append(("send_idle", *subsystems))
-
-    def fetch_idle(self) -> list[str]:
-        self._reader.recv(1)
+    def idle(self, *subsystems: str) -> list[str]:
+        self.calls.append(("idle", *subsystems))
+        if not self._reader.recv(1):
+            raise ConnectionError("Connection lost while reading line")
         return ["player"]
 
     def trigger(self) -> None:
@@ -179,3 +179,69 @@ def test_execute(state: str, action: Action, expected: tuple[Any, ...]) -> None:
     adapter.refresh(listener)
     adapter.execute(action)
     assert commands.calls == [("connect", "localhost", 6600), expected, ("disconnect",)]
+
+
+class FakeMpdServer:
+    """Speaks just enough of the MPD protocol for the real python-mpd2 client."""
+
+    def __init__(self) -> None:
+        self.song = dict(SONG)
+        self.changed = threading.Event()
+        self._server = socket.create_server(("127.0.0.1", 0))
+        self.port: int = self._server.getsockname()[1]
+        self._thread = threading.Thread(target=self._serve, daemon=True)
+        self._thread.start()
+
+    def _serve(self) -> None:
+        while True:
+            try:
+                conn, _ = self._server.accept()
+            except OSError:
+                return
+            threading.Thread(target=self._handle, args=(conn,), daemon=True).start()
+
+    def _handle(self, conn: socket.socket) -> None:
+        with conn, conn.makefile("rwb") as stream:
+            stream.write(b"OK MPD 0.24.0\n")
+            stream.flush()
+            for raw in stream:
+                command = raw.decode().split(" ", 1)[0].strip()
+                if command == "status":
+                    body = STATUS
+                elif command == "currentsong":
+                    body = self.song
+                elif command == "idle":
+                    self.changed.wait()
+                    self.changed.clear()
+                    body = {"changed": "player"}
+                else:
+                    return
+                for key, value in body.items():
+                    stream.write(f"{key}: {value}\n".encode())
+                stream.write(b"OK\n")
+                stream.flush()
+
+    def close(self) -> None:
+        self._server.close()
+
+
+def test_adapter_with_real_python_mpd2_client() -> None:
+    pytest.importorskip("mpd")
+    server = FakeMpdServer()
+    adapter = MpdAdapter(host="127.0.0.1", port=server.port, clock=lambda: 1.0)
+    adapter.start(lambda: None)
+    try:
+        wait_until(lambda: adapter.now_playing() is not None)
+        assert adapter.now_playing().title == "Gasoline"  # type: ignore[union-attr]
+        server.song = {**SONG, "title": "Show Me How to Live"}
+        server.changed.set()
+        wait_until(
+            lambda: adapter.now_playing().title == "Show Me How to Live"  # type: ignore[union-attr]
+        )
+    finally:
+        started = time.monotonic()
+        adapter.stop()
+        server.close()
+    # stop() interrupts the blocking idle() instead of waiting for the join timeout
+    assert time.monotonic() - started < 2
+    assert adapter._thread is None

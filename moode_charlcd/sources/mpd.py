@@ -2,6 +2,10 @@
 
 Listens for MPD ``idle`` events, so changes made in the moOde web UI show up
 immediately. Commands use a separate short-lived connection.
+
+python-mpd2 3.x only offers a blocking ``idle()`` (``send_idle``/``fetch_idle``
+were removed). To stop the listener, its socket is shut down, which makes the
+pending ``idle()`` return with an error.
 """
 
 from __future__ import annotations
@@ -9,7 +13,7 @@ from __future__ import annotations
 import contextlib
 import logging
 import os
-import select
+import socket
 import threading
 import time
 from collections.abc import Callable, Mapping
@@ -33,8 +37,7 @@ class MpdClient(Protocol):
     def fileno(self) -> int: ...
     def status(self) -> dict[str, Any]: ...
     def currentsong(self) -> dict[str, Any]: ...
-    def send_idle(self, *subsystems: str) -> None: ...
-    def fetch_idle(self) -> list[str]: ...
+    def idle(self, *subsystems: str) -> list[str]: ...
     def pause(self, value: int) -> None: ...
     def play(self) -> None: ...
     def previous(self) -> None: ...
@@ -125,6 +128,16 @@ def map_mpd(status: Mapping[str, Any], song: Mapping[str, Any], now: float) -> N
     )
 
 
+def _interrupt(client: MpdClient) -> None:
+    """Shut down the client's socket so that a blocking ``idle()`` returns."""
+    # A duplicate of the descriptor; shutdown() acts on the shared socket.
+    with (
+        contextlib.suppress(Exception),
+        socket.socket(fileno=os.dup(client.fileno())) as sock,
+    ):
+        sock.shutdown(socket.SHUT_RDWR)
+
+
 class MpdAdapter(PlayerAdapter):
     name = "mpd"
 
@@ -144,6 +157,7 @@ class MpdAdapter(PlayerAdapter):
         self._lock = threading.Lock()
         self._current: NowPlaying | None = None
         self._stop = threading.Event()
+        self._listener: MpdClient | None = None
         self._thread: threading.Thread | None = None
         self._notify: Notify = lambda: None
 
@@ -157,6 +171,10 @@ class MpdAdapter(PlayerAdapter):
 
     def stop(self) -> None:
         self._stop.set()
+        with self._lock:
+            listener = self._listener
+        if listener is not None:
+            _interrupt(listener)
         if self._thread is not None:
             self._thread.join(timeout=5)
             self._thread = None
@@ -179,16 +197,19 @@ class MpdAdapter(PlayerAdapter):
             client = None
             try:
                 client = self._connect()
+                with self._lock:
+                    self._listener = client
+                if self._stop.is_set():  # stop() ran before the listener was known
+                    break
                 logger.info("Connected to MPD at %s:%s", self._host, self._port)
                 failed = False
                 self.refresh(client)
                 while not self._stop.is_set():
-                    client.send_idle(*IDLE_SUBSYSTEMS)
-                    if not self._wait_readable(client):
-                        break
-                    client.fetch_idle()
+                    client.idle(*IDLE_SUBSYSTEMS)
                     self.refresh(client)
             except Exception as error:  # connection lost, MPD restarted, ...
+                if self._stop.is_set():  # interrupted by stop()
+                    break
                 # Warn once when the connection is lost, then retry quietly.
                 level = (
                     logging.WARNING
@@ -199,18 +220,12 @@ class MpdAdapter(PlayerAdapter):
                 failed = True
                 self._set(None)
             finally:
+                with self._lock:
+                    self._listener = None
                 if client is not None:
                     with contextlib.suppress(Exception):
                         client.disconnect()
             self._stop.wait(self._reconnect_interval)
-
-    def _wait_readable(self, client: MpdClient) -> bool:
-        """Wait for an idle response; False if the adapter is stopping."""
-        while not self._stop.is_set():
-            readable, _, _ = select.select([client.fileno()], [], [], 1.0)
-            if readable:
-                return True
-        return False
 
     def refresh(self, client: MpdClient) -> None:
         self._set(map_mpd(client.status(), client.currentsong(), self._clock()))
