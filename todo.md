@@ -84,10 +84,10 @@ MoodeRendererAdapter ──────┼─> NowPlaying ─> NowPlayingService
 ### Veröffentlichen (vor der Installation nötig)
 
 - [x] Branches reviewen, `rewrite-moode` nach `master` mergen, pushen
-- [ ] Tag `v0.2.0` setzen und pushen (das Installationsskript installiert genau diesen Tag;
+- [x] Tag `v0.2.0` setzen und pushen (das Installationsskript installiert genau diesen Tag;
       0.2.0 statt 0.1.0, weil es aus dem früheren Code schon den Tag `0.1.1` gibt)
 - [x] `add-moode-charlcd` nach `moodeaudio` mergen und pushen
-- [ ] CI-Lauf auf GitHub prüfen (Workflow ist aktiv, bisher aber 0 Läufe: Settings → Actions →
+- [x] CI-Lauf auf GitHub prüfen (Workflow ist aktiv, bisher aber 0 Läufe: Settings → Actions →
       „Allow all actions“, dann unter Actions „Run workflow“)
 
 ### Am Pi prüfen (blind getroffene Annahmen)
